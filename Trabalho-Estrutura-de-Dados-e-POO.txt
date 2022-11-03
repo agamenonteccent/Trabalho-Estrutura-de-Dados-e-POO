@@ -1,0 +1,546 @@
+public class Aluno {
+
+    private String nome;
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String toString() {
+        return this.nome;
+    }
+
+    public boolean equals(Object o) {
+        Aluno outro = (Aluno)o;
+        return this.nome.equals(outro.nome);
+    }
+}
+
+-----------------------------------------------------------------------------------
+
+public class Vetor {
+
+    private Aluno[] alunos = new Aluno[1000];
+
+    private int totalDeAlunos = 0;
+
+    private void garantaEspaco() {
+        if (this.totalDeAlunos == this.alunos.length) {
+            Aluno[] novaArray = new Aluno[this.alunos.length * 2];
+            for (int i = 0; i < this.alunos.length; i++) {
+                novaArray[i] = this.alunos[i];
+            }
+            this.alunos = novaArray;
+        }
+    }
+
+    public void adiciona(Aluno aluno) {
+        this.garantaEspaco();
+        for (int i = 0; i < this.alunos.length; i++) {
+            if (this.alunos[i] == null) {
+                this.alunos[i] = aluno;
+                break;
+            }
+        }
+    }
+
+    public void adiciona(Aluno aluno) {
+        this.garantaEspaco();
+        this.alunos[totalDeAlunos] = aluno;
+        totalDeAlunos++;
+    }
+
+    public void adiciona(int posicao, Aluno aluno) {
+        if (!posicaoValida(posicao)) {
+            throw new IllegalArgumentException("Posição Inválida");
+        }
+
+        for (int i = this.totalDeAlunos - 1; i >= posicao; i--) {
+            this.alunos[i + 1] = this.alunos[i];
+        }
+
+        this.alunos[posicao] = aluno;
+        this.totalDeAlunos++;
+    }
+
+    private boolean posicaoValida(int posicao) {
+        return posicao >= 0 && posicao <= this.totalDeAlunos;
+    }
+
+    public Aluno pega(int posicao) {
+        return this.alunos[posicao];
+    }
+
+    public Aluno pega(int posicao) {
+        if (!this.posicaoOcupada(posicao)) {
+            throw new IllegalArgumentException("Posição Inválida");
+        }
+        return this.alunos[posicao];
+    }
+
+    public void remove(int posicao) {
+
+        if (!posicaoOcupada(posicao)) {
+            throw new IllegalArgumentException("Posição inválida");
+        }
+
+        for (int i = posicao; i < this.totalDeAlunos - 1; i++) {
+            this.alunos[i] = this.alunos[i + 1];
+        }
+
+        this.totalDeAlunos--;
+    }
+
+    private boolean posicaoOcupada(int posicao) {
+        return posicao >= 0 && posicao < this.totalDeAlunos;
+    }
+
+    public boolean contem(Aluno aluno) {
+        for (int i = 0; i < this.alunos.length; i++) {
+            if (aluno == this.alunos[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean contem(Aluno aluno) {
+        for (int i = 0; i < this.totalDeAlunos; i++) {
+            if (aluno == this.alunos[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int tamanho() {
+        return this.totalDeAlunos;
+    }
+
+    public String toString() {
+        if (this.totalDeAlunos == 0) {
+            return "[]";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+
+        for (int i = 0; i < this.totalDeAlunos - 1; i++) {
+            builder.append(this.alunos[i]);
+            builder.append(", ");
+        }
+
+        builder.append(this.alunos[this.totalDeAlunos - 1]);
+        builder.append("]");
+
+        return builder.toString();
+    }
+
+
+}
+
+----------------------------------------------------------------------------
+
+public class TesteAdiciona {
+
+    public static void main(String[] args) {
+        Aluno aluno = new Aluno();
+       
+        aluno.setNome("Rafel");
+        
+        Vetor vetor = new Vetor();
+
+        vetor.adiciona(aluno);
+        
+        System.out.println(vetor);
+    }
+}
+
+-------------------------------------------------------------------------------
+
+public class TesteAdicionaa {
+
+    public static void main(String[] args) {
+
+        Aluno aluno1 = new Aluno();
+        Aluno aluno2 = new Aluno();
+        Aluno aluno3 = new Aluno();
+        Aluno aluno4 = new Aluno();
+       
+
+        aluno1.setNome("José");
+        aluno2.setNome("Pedro");
+        aluno3.setNome("Assis");
+        aluno4.setNome("zé");
+        
+
+        Vetor vetor = new Vetor();
+
+        vetor.adiciona(aluno1);
+        vetor.adiciona(aluno2);
+        vetor.adiciona(aluno3);
+
+        System.out.println(vetor);
+
+        vetor.adiciona(1, aluno4);
+
+        System.out.println(vetor);
+
+    }
+}
+
+
+
+
+-------------------------------------------------------------------------------------
+
+public class TesteAdicionaPosicao {
+
+    public static void main(String[] args) {
+
+        Aluno aluno1 = new Aluno();
+        Aluno aluno2 = new Aluno();
+        Aluno aluno3 = new Aluno();
+        
+
+        aluno1.setNome("zé");
+        aluno2.setNome("pedro");
+        aluno3.setNome("antonio");
+        aluno4.setNome("José");
+
+        Vetor vetor = new Vetor();
+
+        vetor.adiciona(aluno1);
+        vetor.adiciona(aluno2);
+        vetor.adiciona(aluno3);
+        
+
+        System.out.println(vetor);
+
+        vetor.adiciona(1, aluno4);
+
+        System.out.println(vetor);
+
+    }
+
+
+}
+
+--------------------------------------------------------------------
+
+public class TesteContem {
+
+    public static void main(String[] args) {
+
+        Aluno aluno1 = new Aluno();
+        Aluno aluno2 = new Aluno();
+        Aluno aluno3 = new Aluno();
+        Aluno aluno4 = new Aluno();
+        
+
+        aluno1.setNome("zé");
+        aluno2.setNome("Pedro");
+        aluno3.setNome("Assis");
+        aluno4.setNome("Caio");
+        
+
+        Vetor vetor = new Vetor();
+
+        vetor.adiciona(aluno1);
+        vetor.adiciona(aluno2);
+        vetor.adiciona(aluno3);
+        vetor.adiciona(aluno4);
+
+        System.out.println(vetor.contem(aluno3));
+
+    }
+}
+
+-----------------------------------------------------------------------
+
+public class TesteTempoContem {
+
+    public static void main(String[] args) {
+
+        Vetor vetor = new Vetor();
+
+        long inicio = System.currentTimeMillis();
+
+        for (int i = 1; i < 30000; i++) {
+            Aluno aluno = new Aluno();
+            vetor.adiciona(aluno);
+            if (!vetor.contem(aluno)) {
+                System.out.println("Erro: aluno " + aluno + "não foi adicionado");
+            }
+        }
+
+        for (int i = 1; i < 30000; i++) {
+            Aluno aluno = new Aluno();
+            if (vetor.contem(aluno)) {
+                System.out.println("Erro: aluno " + aluno + "foi adicionado");
+            }
+        }
+
+        long fim = System.currentTimeMillis();
+        double tempo = (fim - inicio) / 1000.0;
+
+        System.out.println("Tempo = " + tempo);
+
+    }
+}
+
+--------------------------------------------------------------------------
+
+public class TesteEstoura {
+
+    public static void main(String[] args) {
+
+        Vetor vetor = new Vetor();
+
+        for (int i = 0; i < 100001; i++) {
+            Aluno aluno = new Aluno();
+            vetor.adiciona(aluno);
+        }
+    }
+}
+
+------------------------------------------------------------------------------
+
+public class TesteLinearVSConstante {
+
+    public static void main(String[] args) {
+
+        Vetor vetor = new Vetor();
+        long inicio = System.currentTimeMillis();
+        for (int i = 1; i < 10000; i++) {
+            Aluno aluno = new Aluno();
+            vetor.adiciona(aluno);
+        }
+        long fim = System.currentTimeMillis();
+        double tempo = (fim - inicio) / 1000.0;
+        System.out.println("Tempo em segundos = " + tempo);
+
+    }
+}
+
+------------------------------------------------------------------------------------
+
+public class TestePega {
+
+    public static void main(String[] args) {
+
+        Aluno aluno1 = new Aluno();
+        Aluno aluno2 = new Aluno();
+        Aluno aluno3 = new Aluno();
+
+        aluno1.setNome("Pedro");
+        aluno2.setNome("carlos");
+        aluno3.setNome("gabriela");
+
+        Vetor vetor = new Vetor();
+
+        vetor.adiciona(aluno1);
+        vetor.adiciona(aluno2);
+        vetor.adiciona(aluno3);
+
+        System.out.println(vetor.pega(2));
+        System.out.println(vetor.pega(3));
+        System.out.println(vetor.pega(1000001));
+
+    }
+}
+
+--------------------------------------------------------------
+
+public class TestePegaPosicao {
+
+    public static void main(String[] args) {
+
+        Aluno aluno1 = new Aluno();
+        Aluno aluno2 = new Aluno();
+        Aluno aluno3 = new Aluno();
+        Aluno aluno4 = new Aluno();
+
+        aluno1.setNome("zé");
+        aluno2.setNome("assis");
+        aluno3.setNome("rodrigues");
+        aluno4.setNome("José");
+
+        Vetor vetor = new Vetor();
+
+        vetor.adiciona(aluno1);
+        vetor.adiciona(aluno2);
+        vetor.adiciona(aluno3);
+        vetor.adiciona(aluno4);
+
+        System.out.println(vetor.pega(3));
+
+    }
+}
+
+------------------------------------------------------------------
+
+public class TesteRemove {
+
+    public static void main(String[] args) {
+
+        Aluno aluno1 = new Aluno();
+        Aluno aluno2 = new Aluno();
+        Aluno aluno3 = new Aluno();
+
+        aluno1.setNome("zé");
+        aluno2.setNome("Pedro");
+        aluno3.setNome("caio");
+
+        Vetor vetor = new Vetor();
+
+        vetor.adiciona(aluno1);
+        vetor.adiciona(aluno2);
+        vetor.adiciona(aluno3);
+
+        System.out.println(vetor);
+
+        vetor.remove(1);
+
+        System.out.println(vetor);
+
+    }
+}
+
+---------------------------------------------------------------
+
+public class TesteRemovePosicao {
+
+    public static void main(String[] args) {
+
+        Aluno aluno1 = new Aluno();
+        Aluno aluno2 = new Aluno();
+        Aluno aluno3 = new Aluno();
+        Aluno aluno4 = new Aluno();
+
+        aluno1.setNome("pedro");
+        aluno2.setNome("Jose");
+        aluno3.setNome("caio");
+        aluno4.setNome("ana");
+
+        Vetor vetor = new Vetor();
+
+        vetor.adiciona(aluno1);
+        vetor.adiciona(aluno2);
+        vetor.adiciona(aluno3);
+        vetor.adiciona(aluno4);
+
+        System.out.println(vetor);
+
+        vetor.remove(1);
+
+        System.out.println(vetor);
+
+    }
+}
+
+--------------------------------------------------------------------
+
+public class TesteTamanhoLista {
+
+    public static void main(String[] args) {
+
+        Aluno aluno1 = new Aluno();
+        Aluno aluno2 = new Aluno();
+        Aluno aluno3 = new Aluno();
+
+        aluno1.setNome("Pedro");
+        aluno2.setNome("jose");
+        aluno3.setNome("Caio");
+
+        Vetor vetor = new Vetor();
+
+        vetor.adiciona(aluno1);
+        vetor.adiciona(aluno2);
+        vetor.adiciona(aluno3);
+
+        System.out.println(vetor.tamanho());
+
+    }
+}
+
+----------------------------------------------------------------------------
+
+public class VetorObjeto {
+
+    private Object[] objetos = new Object[100];
+
+    private int totalDeObjetos = 0;
+
+    private void garantaEspaco() {
+        if (this.totalDeObjetos == this.objetos.length) {
+            Object[] novoArray = new Object[this.objetos.length * 2];
+            for (int i = 0; i < this.objetos.length; i++) {
+                novoArray[i] = this.objetos[i];
+            }
+            this.objetos = novoArray;
+        }
+    }
+
+    public void adiciona(Object objeto) {
+        this.garantaEspaco();
+        this.objetos[this.totalDeObjetos] = objeto;
+        this.totalDeObjetos++;
+    }
+    public void adiciona(int posicao, Aluno aluno) {
+        this.garantaEspaco();
+        if (!this.posicaoValida(posicao)) {
+            throw new IllegalArgumentException("Posicao inválida");
+        }
+        for (int i = this.totalDeObjetos - 1; i >= posicao; i--) {
+            this.objetos[i + 1] = this.objetos[i];
+        }
+        this.objetos[posicao] = aluno;
+        this.totalDeObjetos++;
+    }
+
+    private boolean posicaoValida(int posicao) {
+        return posicao >= 0 && posicao <= this.totalDeObjetos;
+    }
+
+    public Object pega(int posicao) {
+        if (!this.posicaoOcupada(posicao)) {
+            throw new IllegalArgumentException("Posicao inválida");
+        }
+        return this.objetos[posicao];
+    }
+
+    public void remove(int posicao) {
+
+        if (!posicaoOcupada(posicao)) {
+            throw new IllegalArgumentException("Posição inválida");
+        }
+
+        for (int i = posicao; i < this.totalDeObjetos - 1; i++) {
+            this.objetos[i] = this.objetos[i + 1];
+        }
+
+        this.totalDeObjetos--;
+    }
+
+    private boolean posicaoOcupada(int posicao) {
+        return posicao >= 0 && posicao < this.totalDeObjetos;
+    }
+
+    public boolean contem(Aluno aluno) {
+        for (int i = 0; i < this.totalDeObjetos; i++) {
+            if (aluno.equals(this.objetos[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public int tamanho() {
+        return this.totalDeObjetos;
+    }
+ 
+}
